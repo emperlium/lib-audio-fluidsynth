@@ -1,4 +1,4 @@
-# lib-audio-resample
+# lib-audio-fluidsynth
 
 Wrapper for libfluidsynth.
 
