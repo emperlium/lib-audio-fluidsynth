@@ -21,63 +21,26 @@ On Ubuntu distributions;
 ## Example
 
     use Nick::Audio::FluidSynth;
-    use Nick::Audio::PulseAudio;
 
-    use Time::HiRes qw( time sleep );
-
-    my $sample_rate = 44100;
+    use Time::HiRes 'sleep';
 
     my $fluidsynth = Nick::Audio::FluidSynth -> new(
         'soundfont'     => '/usr/share/sounds/sf2/FluidR3_GM.sf2',
-        'sample_rate'   => $sample_rate
+        'sample_rate'   => 44100
     );
 
-    my $pulse = Nick::Audio::PulseAudio -> new(
-        'sample_rate'   => $sample_rate,
-        'channels'      => 2,
-        'buffer_in'     => $fluidsynth -> get_buffer_out_ref(),
-        'buffer_secs'   => .1,
-        'volume'        => 100
-    );
+    $fluidsynth -> setting_string( 'audio.driver', 'pulseaudio' );
+    $fluidsynth -> add_audio_driver();
+    $fluidsynth -> set_preset( 0, 0, 46 );
 
-    my $channel = 0;
     my @notes = map 60 + ( $_ * 2 ), 1 .. 20;
-    my $duration = .05;
 
-    $fluidsynth -> set_preset( $channel => 46 );
-
-    my $last_write = 0;
-    my $i = 0;
-    for ( ;; ) {
-        if (
-            time - $last_write >= $duration
-        ) {
-            ++$i > $#notes
-                and last;
-            $fluidsynth -> set_pan( $channel, 127 * ( $i / $#notes ) );
-            $fluidsynth -> send_note( $channel, $notes[$i], 127, $duration * 1000 );
-            $last_write = time;
-        } elsif (
-            $pulse -> can_write()
-        ) {
-            $fluidsynth -> process();
-            $pulse -> play_nb();
-        } else {
-            sleep .1;
-        }
+    for ( my $i = 0; $i <= $#notes; $i++ ) {
+        $fluidsynth -> set_pan( 0, 127 * ( $i / $#notes ) );
+        $fluidsynth -> send_note( 0, $notes[$i], 127, 200 );
+        sleep .05;
     }
-    while ( time - $last_write < 2 ) {
-        $fluidsynth -> active_voices()
-            or last;
-        if ( $pulse -> can_write() ) {
-            $fluidsynth -> process();
-            $pulse -> play();
-        } else {
-            sleep .1;
-        }
-    }
-    $pulse -> flush();
-    $fluidsynth -> system_reset();
+    sleep 2;
 
 ## Methods
 
@@ -106,10 +69,6 @@ The rest are optional.
 - gain
 
     Output gain (0.0 to 10.0)
-
-- voices
-
-    Number of voices preallocated by the synthesizer.
 
 ### setting\_string()
 

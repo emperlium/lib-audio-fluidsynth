@@ -43,7 +43,6 @@ Nick::Audio::FluidSynth - Wrapper for libfluidsynth
     }
     sleep 2;
 
-
 =head1 METHODS
 
 =head2 new()
@@ -77,10 +76,6 @@ Number of bytes of PCM generated on each call to B<process()>.
 =item gain
 
 Output gain (0.0 to 10.0)
-
-=item voices
-
-Number of voices preallocated by the synthesizer.
 
 =back
 
