@@ -161,7 +161,7 @@ sub new {
 }
 
 sub set_pan {
-    $_[0] -> set_controller( $_[1], 10, $_[1] );
+    $_[0] -> set_controller( $_[1], 10, $_[2] );
 }
 
 1;
