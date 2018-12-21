@@ -115,6 +115,10 @@ Takes a channel, SoundFont ID, bank and preset as arguments.
 
 Takes a channel and a value (0=melodic, 1=drum).
 
+=head2 set_controller()
+
+Takes a channel, controller number and value as arguments.
+
 =head2 set_pan()
 
 Takes a channel and a value (0-127, 63=centre).
@@ -150,6 +154,10 @@ sub new {
         'audio.period-size' => $settings{'audio_bytes'}
     );
     return $self;
+}
+
+sub set_pan {
+    $_[0] -> set_controller( $_[1], 10, $_[1] );
 }
 
 1;

@@ -112,6 +112,10 @@ Takes a channel, SoundFont ID, bank and preset as arguments.
 
 Takes a channel and a value (0=melodic, 1=drum).
 
+### set\_controller()
+
+Takes a channel, controller number and value as arguments.
+
 ### set\_pan()
 
 Takes a channel and a value (0-127, 63=centre).

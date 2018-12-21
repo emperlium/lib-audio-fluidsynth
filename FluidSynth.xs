@@ -189,18 +189,19 @@ NICKAUDIOFLUIDSYNTH::set_channel_type( channel, type )
         }
 
 void
-NICKAUDIOFLUIDSYNTH::set_pan( channel, pan )
+NICKAUDIOFLUIDSYNTH::set_controller( channel, number, value )
         int channel;
-        int pan;
+        int number;
+        int value;
     CODE:
         if (
             fluid_synth_cc(
-                THIS -> synth, channel, 10, pan
+                THIS -> synth, channel, number, value
             ) == FLUID_FAILED
         ) {
             croak(
-                "Unable to set channel %d to pan %d",
-                channel, pan
+                "Unable to set controller event on channel %d, number %d to value %d",
+                channel, number, value
             );
         }
 
