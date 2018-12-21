@@ -176,6 +176,22 @@ NICKAUDIOFLUIDSYNTH::set_preset( channel, sf_id, bank, preset )
         }
 
 void
+NICKAUDIOFLUIDSYNTH::set_program( channel, program )
+        int channel;
+        int program;
+    CODE:
+        if (
+            fluid_synth_program_change(
+                THIS -> synth, channel, program
+            ) == FLUID_FAILED
+        ) {
+            croak(
+                "Unable to set channel %d, program %d",
+                channel, program
+            );
+        }
+
+void
 NICKAUDIOFLUIDSYNTH::set_channel_type( channel, type )
         int channel;
         int type;

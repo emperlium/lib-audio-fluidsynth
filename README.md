@@ -40,7 +40,7 @@ On Ubuntu distributions;
     my @notes = map 60 + ( $_ * 2 ), 1 .. 20;
 
     for ( my $i = 0; $i <= $#notes; $i++ ) {
-        $fluidsynth -> set_pan( 0, 127 * ( $i / $#notes ) );
+        $fluidsynth -> set_pan( 0, 127 * $i / $#notes );
         $fluidsynth -> send_note( 0, $notes[$i], 127, 200 );
         sleep .05;
     }
@@ -107,6 +107,10 @@ Gets a reference to the scalar that **process()** will fill with PCM data.
 ### set\_preset()
 
 Takes a channel, SoundFont ID, bank and preset as arguments.
+
+### set\_program()
+
+Takes a channel and program number as arguments.
 
 ### set\_channel\_type()
 
