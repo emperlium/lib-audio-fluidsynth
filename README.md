@@ -18,17 +18,19 @@ On Ubuntu distributions;
     make test
     sudo make install
 
+### Testing using SoundFont other than "/usr/share/sounds/sf2/FluidR3_GM.sf2"
+
+    TEST_SOUNDFONT=/path/soundfont.sf2
+
 ## Example
 
     use Nick::Audio::FluidSynth;
 
     use Time::HiRes 'sleep';
 
-    my $fluidsynth = Nick::Audio::FluidSynth -> new(
-        'soundfont'     => '/usr/share/sounds/sf2/FluidR3_GM.sf2',
-        'sample_rate'   => 44100
-    );
+    my $fluidsynth = Nick::Audio::FluidSynth -> new();
 
+    $fluidsynth -> load_soundfont( '/usr/share/sounds/sf2/FluidR3_GM.sf2' );
     $fluidsynth -> setting_string( 'audio.driver', 'pulseaudio' );
     $fluidsynth -> add_audio_driver();
     $fluidsynth -> set_preset( 0, 0, 46 );
@@ -44,19 +46,11 @@ On Ubuntu distributions;
 
 ## Methods
 
-## new()
+### new()
 
 Instantiates a new Nick::Audio::FluidSynth object.
 
-Arguments are interpreted as a hash.
-
-There's one mandatory key.
-
-- soundfont
-
-    Path of a soundfont file.
-
-The rest are optional.
+All arguments are optional.
 
 - buffer\_out
 
@@ -69,6 +63,14 @@ The rest are optional.
 - gain
 
     Output gain (0.0 to 10.0)
+
+### load\_soundfont()
+
+Loads a SoundFont file.
+
+Takes two arguments, the path to the SoundFont file and (optionally) whether to re-assign presets for all MIDI channels (default 1).
+
+Returns the SoundFont ID.
 
 ### setting\_string()
 

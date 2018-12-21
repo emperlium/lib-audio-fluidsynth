@@ -25,11 +25,9 @@ Nick::Audio::FluidSynth - Wrapper for libfluidsynth
 
     use Time::HiRes 'sleep';
 
-    my $fluidsynth = Nick::Audio::FluidSynth -> new(
-        'soundfont'     => '/usr/share/sounds/sf2/FluidR3_GM.sf2',
-        'sample_rate'   => 44100
-    );
+    my $fluidsynth = Nick::Audio::FluidSynth -> new();
 
+    $fluidsynth -> load_soundfont( '/usr/share/sounds/sf2/FluidR3_GM.sf2' );
     $fluidsynth -> setting_string( 'audio.driver', 'pulseaudio' );
     $fluidsynth -> add_audio_driver();
     $fluidsynth -> set_preset( 0, 0, 46 );
@@ -51,17 +49,7 @@ Instantiates a new Nick::Audio::FluidSynth object.
 
 Arguments are interpreted as a hash.
 
-There's one mandatory key.
-
-=over 2
-
-=item soundfont
-
-Path of a soundfont file.
-
-=back
-
-The rest are optional.
+All arguments are optional.
 
 =over 2
 
@@ -78,6 +66,14 @@ Number of bytes of PCM generated on each call to B<process()>.
 Output gain (0.0 to 10.0)
 
 =back
+
+=head2 load_soundfont()
+
+Loads a SoundFont file.
+
+Takes two arguments, the path to the SoundFont file and (optionally) whether to re-assign presets for all MIDI channels (default 1).
+
+Returns the SoundFont ID.
 
 =head2 setting_string()
 
@@ -141,15 +137,12 @@ Sends MIDI system reset command.
 
 sub new {
     my( $class, %settings ) = @_;
-    exists( $settings{'soundfont'} )
-        or croak( 'Missing soundfont parameter' );
     $settings{'buffer_out'} ||= do{ my $x = '' };
+    $settings{'sample_rate'} ||= 44100;
     $settings{'audio_bytes'} ||= 4096;
     $settings{'gain'} ||= .8;
     my $self = Nick::Audio::FluidSynth -> new_xs(
-        @settings{ qw(
-            buffer_out soundfont sample_rate audio_bytes gain
-        ) }
+        @settings{ qw( buffer_out sample_rate audio_bytes gain ) }
     );
     $self -> setting_int(
         'audio.period-size' => $settings{'audio_bytes'}

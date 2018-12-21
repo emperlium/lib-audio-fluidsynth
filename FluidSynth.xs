@@ -23,9 +23,8 @@ typedef struct nickaudiofluidsynth NICKAUDIOFLUIDSYNTH;
 MODULE = Nick::Audio::FluidSynth  PACKAGE = Nick::Audio::FluidSynth
 
 static NICKAUDIOFLUIDSYNTH *
-NICKAUDIOFLUIDSYNTH::new_xs( scalar_out, soundfont, sample_rate, bytes, gain )
+NICKAUDIOFLUIDSYNTH::new_xs( scalar_out, sample_rate, bytes, gain )
         SV *scalar_out;
-        const char *soundfont;
         unsigned int sample_rate;
         unsigned int bytes;
         float gain;
@@ -37,13 +36,6 @@ NICKAUDIOFLUIDSYNTH::new_xs( scalar_out, soundfont, sample_rate, bytes, gain )
         RETVAL -> synth = new_fluid_synth( RETVAL -> settings );
         fluid_synth_set_sample_rate( RETVAL -> synth, sample_rate );
         fluid_synth_set_gain( RETVAL -> synth, gain );
-        if (
-            fluid_synth_sfload(
-                RETVAL -> synth, soundfont, 1
-            ) == FLUID_FAILED
-        ) {
-            croak( "Unable to load soundfont: %s", soundfont );
-        }
         RETVAL -> sequencer = new_fluid_sequencer2( 0 );
         RETVAL -> synth_seq_id = fluid_sequencer_register_fluidsynth(
             RETVAL -> sequencer, RETVAL -> synth
@@ -69,6 +61,20 @@ NICKAUDIOFLUIDSYNTH::DESTROY()
         delete_fluid_synth( THIS -> synth );
         delete_fluid_settings( THIS -> settings );
         Safefree( THIS );
+
+int
+NICKAUDIOFLUIDSYNTH::load_soundfont( soundfont, reset_presets = 1 )
+        const char *soundfont;
+        int reset_presets;
+    CODE:
+        RETVAL = fluid_synth_sfload(
+            THIS -> synth, soundfont, reset_presets
+        );
+        if ( RETVAL == FLUID_FAILED ) {
+            croak( "Unable to load soundfont: %s", soundfont );
+        }
+    OUTPUT:
+        RETVAL
 
 void
 NICKAUDIOFLUIDSYNTH::setting_string( key, value )

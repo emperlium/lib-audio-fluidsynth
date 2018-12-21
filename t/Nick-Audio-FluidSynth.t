@@ -8,7 +8,6 @@ use_ok( 'Nick::Audio::FluidSynth' );
 my $buffer;
 my $fluidsynth = Nick::Audio::FluidSynth -> new(
     'buffer_out'    => \$buffer,
-    'soundfont'     => '/usr/share/sounds/sf2/FluidR3_GM.sf2',
     'sample_rate'   => 11050,
     'audio_bytes'   => 500,
     'gain'          => 1
@@ -16,6 +15,9 @@ my $fluidsynth = Nick::Audio::FluidSynth -> new(
 
 ok( defined( $fluidsynth ), 'new()' );
 
+$fluidsynth -> load_soundfont(
+    $ENV{'TEST_SOUNDFONT'} || '/usr/share/sounds/sf2/FluidR3_GM.sf2'
+);
 $fluidsynth -> setting_string( 'synth.reverb.active', 'no' );
 $fluidsynth -> setting_string( 'synth.chorus.active', 'no' );
 
