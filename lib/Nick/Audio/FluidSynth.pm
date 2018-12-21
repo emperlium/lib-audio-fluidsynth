@@ -27,10 +27,12 @@ Nick::Audio::FluidSynth - Wrapper for libfluidsynth
 
     my $fluidsynth = Nick::Audio::FluidSynth -> new();
 
-    $fluidsynth -> load_soundfont( '/usr/share/sounds/sf2/FluidR3_GM.sf2' );
+    my $sf_id = $fluidsynth -> load_soundfont(
+        '/usr/share/sounds/sf2/FluidR3_GM.sf2'
+    );
     $fluidsynth -> setting_string( 'audio.driver', 'pulseaudio' );
     $fluidsynth -> add_audio_driver();
-    $fluidsynth -> set_preset( 0, 0, 46 );
+    $fluidsynth -> set_preset( 0, $sf_id, 0, 46 );
 
     my @notes = map 60 + ( $_ * 2 ), 1 .. 20;
 
@@ -107,7 +109,7 @@ Gets a reference to the scalar that B<process()> will fill with PCM data.
 
 =head2 set_preset()
 
-Takes a channel, bank and preset as arguments.
+Takes a channel, SoundFont ID, bank and preset as arguments.
 
 =head2 set_channel_type()
 

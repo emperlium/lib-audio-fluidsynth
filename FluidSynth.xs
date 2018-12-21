@@ -158,14 +158,15 @@ NICKAUDIOFLUIDSYNTH::process()
         );
 
 void
-NICKAUDIOFLUIDSYNTH::set_preset( channel, bank, preset )
+NICKAUDIOFLUIDSYNTH::set_preset( channel, sf_id, bank, preset )
         int channel;
+        int sf_id;
         int bank;
         int preset;
     CODE:
         if (
             fluid_synth_program_select(
-                THIS -> synth, channel, 1, bank, preset
+                THIS -> synth, channel, sf_id, bank, preset
             ) == FLUID_FAILED
         ) {
             croak(
