@@ -25,7 +25,7 @@ MODULE = Nick::Audio::FluidSynth  PACKAGE = Nick::Audio::FluidSynth
 static NICKAUDIOFLUIDSYNTH *
 NICKAUDIOFLUIDSYNTH::new_xs( scalar_out, sample_rate, bytes, gain )
         SV *scalar_out;
-        unsigned int sample_rate;
+        float sample_rate;
         unsigned int bytes;
         float gain;
     CODE:
@@ -33,8 +33,8 @@ NICKAUDIOFLUIDSYNTH::new_xs( scalar_out, sample_rate, bytes, gain )
         RETVAL -> bytes = bytes;
         RETVAL -> samples = bytes / 4;
         RETVAL -> settings = new_fluid_settings();
+        fluid_settings_setnum( RETVAL -> settings, "synth.sample-rate", sample_rate );
         RETVAL -> synth = new_fluid_synth( RETVAL -> settings );
-        fluid_synth_set_sample_rate( RETVAL -> synth, sample_rate );
         fluid_synth_set_gain( RETVAL -> synth, gain );
         RETVAL -> sequencer = new_fluid_sequencer2( 0 );
         RETVAL -> synth_seq_id = fluid_sequencer_register_fluidsynth(
