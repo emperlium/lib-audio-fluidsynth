@@ -108,11 +108,11 @@ NICKAUDIOFLUIDSYNTH::setting_num( key, value )
         double value;
     CODE:
         if (
-            fluid_settings_setint(
+            fluid_settings_setnum(
                 THIS -> settings, key, value
             ) == FLUID_FAILED
         ) {
-            croak( "Unable to set setting %s with %d", key, value );
+            croak( "Unable to set setting %s with %f", key, value );
         }
 
 void
