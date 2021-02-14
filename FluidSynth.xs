@@ -259,7 +259,7 @@ NICKAUDIOFLUIDSYNTH::send_note( channel, key, velocity, duration )
             ) == FLUID_FAILED
         ) {
             croak(
-                "Unable to set channel %d note on %d,%d", key, velocity
+                "Unable to set channel %d note on %d,%d", channel, key, velocity
             );
         }
 
@@ -270,7 +270,7 @@ NICKAUDIOFLUIDSYNTH::send_note( channel, key, velocity, duration )
             ) == FLUID_FAILED
         ) {
             croak(
-                "Unable to set channel %d note off %d", key
+                "Unable to set channel %d note off %d", channel, key
             );
         }
 
