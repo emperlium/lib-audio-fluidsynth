@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 
 use_ok( 'Nick::Audio::FluidSynth' );
 
@@ -15,9 +15,15 @@ my $fluidsynth = Nick::Audio::FluidSynth -> new(
 
 ok( defined( $fluidsynth ), 'new()' );
 
-$fluidsynth -> load_soundfont(
+my $sf_id = $fluidsynth -> load_soundfont(
     $ENV{'TEST_SOUNDFONT'} || '/usr/share/sounds/sf2/FluidR3_GM.sf2'
 );
+
+ok( $sf_id, 'load_soundfont()' );
+
+my @presets = $fluidsynth -> get_presets( $sf_id );
+ok( @presets > 0, 'get_presets()' );
+
 $fluidsynth -> setting_int( 'synth.reverb.active', 0 );
 $fluidsynth -> setting_int( 'synth.chorus.active', 0 );
 

@@ -291,3 +291,40 @@ NICKAUDIOFLUIDSYNTH::system_reset()
         ) {
             croak( "Unable to reset system" );
         }
+
+AV *
+NICKAUDIOFLUIDSYNTH::get_presets_xs( sf_id )
+        int sf_id;
+    CODE:
+        fluid_sfont_t* sf = fluid_synth_get_sfont_by_id(
+            THIS -> synth, sf_id
+        );
+        if ( sf == NULL ) {
+            croak( "Unable to get soundfont id: %d", sf_id );
+        }
+        RETVAL = newAV();
+        sv_2mortal( (SV*)RETVAL );
+        fluid_preset_t* preset;
+        fluid_sfont_iteration_start( sf );
+        for ( ;; ) {
+            preset = fluid_sfont_iteration_next( sf );
+            if ( preset == NULL ) {
+                break;
+            }
+            HV * hash = (HV *)sv_2mortal( (SV *)newHV() );
+            hv_store( hash,
+                "bank", 4,
+                newSViv( fluid_preset_get_banknum( preset ) ),
+            0 );
+            hv_store( hash,
+                "preset", 6,
+                newSViv( fluid_preset_get_num( preset ) ),
+            0 );
+            hv_store( hash,
+                "name", 4,
+                newSVpv( fluid_preset_get_name( preset ), 0 ),
+            0 );
+            av_push( RETVAL, newRV( (SV *)hash ) );
+        }
+    OUTPUT:
+        RETVAL

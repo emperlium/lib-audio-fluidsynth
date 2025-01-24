@@ -139,3 +139,23 @@ Returns the number of currently active voices.
 ### system\_reset()
 
 Sends MIDI system reset command.
+
+### get\_presets()
+
+Returns an array, with each element being a hash reference of a preset.
+
+For example;
+
+    (
+
+        {
+            name    => 'Yamaha Grand Piano',
+            bank    => 0,
+            preset  => 0
+        },
+        {
+            name    => 'TR-808',
+            bank    => 128,
+            preset  => 25
+        }
+    )

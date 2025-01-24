@@ -143,6 +143,26 @@ Returns the number of currently active voices.
 
 Sends MIDI system reset command.
 
+=head2 get_presets()
+
+Returns an array, with each element being a hash reference of a preset.
+
+For example;
+
+    (
+
+        {
+            name    => 'Yamaha Grand Piano',
+            bank    => 0,
+            preset  => 0
+        },
+        {
+            name    => 'TR-808',
+            bank    => 128,
+            preset  => 25
+        }
+    )
+
 =cut
 
 sub new {
@@ -162,6 +182,12 @@ sub new {
 
 sub set_pan {
     $_[0] -> set_controller( $_[1], 10, $_[2] );
+}
+
+sub get_presets {
+    return wantarray
+        ? @{ $_[0] -> get_presets_xs( $_[1] ) }
+        : $_[0] -> get_presets_xs( $_[1] );
 }
 
 1;
