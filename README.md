@@ -142,6 +142,8 @@ Sends MIDI system reset command.
 
 ### get\_presets()
 
+Takes one argument, the SoundFont ID returned by load\_soundfont().
+
 Returns an array, with each element being a hash reference of a preset.
 
 For example;

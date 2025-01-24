@@ -145,6 +145,8 @@ Sends MIDI system reset command.
 
 =head2 get_presets()
 
+Takes one argument, the SoundFont ID returned by load_soundfont().
+
 Returns an array, with each element being a hash reference of a preset.
 
 For example;
